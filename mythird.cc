@@ -32,8 +32,9 @@ int
 main (int argc, char *argv[])
 {
   bool verbose = true;
-  uint32_t nCsma = 3;
-  uint32_t nWifi = 3;
+  // Cria 9 nodes(?) wifi e LAN - Deveriam ser 9 ou 10? Na Topologia n1 é p2p e LAN?
+  uint32_t nCsma = 9;
+  uint32_t nWifi = 9;
   bool tracing = false;
 
   CommandLine cmd;
@@ -59,20 +60,26 @@ main (int argc, char *argv[])
       LogComponentEnable ("UdpEchoServerApplication", LOG_LEVEL_INFO);
     }
 
+  // Cria dois nodes p2p. Futuro devem ser 3? VERIFICAR!
   NodeContainer p2pNodes;
   p2pNodes.Create (2);
 
+  // caracteristicas da conexão p2p, possivel alterar conforme necessidade
   PointToPointHelper pointToPoint;
   pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
   pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
+  // Instalação dos nodes p2p - na topologia seriam os nodes n0 e n1
   NetDeviceContainer p2pDevices;
   p2pDevices = pointToPoint.Install (p2pNodes);
 
+  //Cria os 9 nodes LAN
   NodeContainer csmaNodes;
+  // Pega o segundo node p2p (n0 e n1, pega n1) e cria os 9 LAN adicionais
   csmaNodes.Add (p2pNodes.Get (1));
   csmaNodes.Create (nCsma);
 
+  
   CsmaHelper csma;
   csma.SetChannelAttribute ("DataRate", StringValue ("100Mbps"));
   csma.SetChannelAttribute ("Delay", TimeValue (NanoSeconds (6560)));
