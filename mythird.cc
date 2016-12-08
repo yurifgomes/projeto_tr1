@@ -79,18 +79,22 @@ main (int argc, char *argv[])
   csmaNodes.Add (p2pNodes.Get (1));
   csmaNodes.Create (nCsma);
 
-  
+  // Caracteristicas da conexão LAN
   CsmaHelper csma;
   csma.SetChannelAttribute ("DataRate", StringValue ("100Mbps"));
   csma.SetChannelAttribute ("Delay", TimeValue (NanoSeconds (6560)));
 
+  // Instalação dos nodes LAN
   NetDeviceContainer csmaDevices;
   csmaDevices = csma.Install (csmaNodes);
 
+  // Criação dos nodes wifi
   NodeContainer wifiStaNodes;
   wifiStaNodes.Create (nWifi);
+  // O primeiro node p2p (tipologia n0) vira o AP do wifi
   NodeContainer wifiApNode = p2pNodes.Get (0);
 
+  //
   YansWifiChannelHelper channel = YansWifiChannelHelper::Default ();
   YansWifiPhyHelper phy = YansWifiPhyHelper::Default ();
   phy.SetChannel (channel.Create ());
