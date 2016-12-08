@@ -94,12 +94,17 @@ main (int argc, char *argv[])
   // O primeiro node p2p (tipologia n0) vira o AP do wifi
   NodeContainer wifiApNode = p2pNodes.Get (0);
 
-  //
+  // COnfiguração inicial dos nós wifi. Configura a camada fisica e o canal,
+  // cria Default, verificar a documentação para eventuais trocas caso necessarias.
   YansWifiChannelHelper channel = YansWifiChannelHelper::Default ();
   YansWifiPhyHelper phy = YansWifiPhyHelper::Default ();
   phy.SetChannel (channel.Create ());
 
+  // Documentação pag 62, indica que a criação da camada MAC foi criada com Qos (qualidade de serviço?)
+  // A documentação cria as camadas MAC non-Qos (sem qualidade de serviço). Qual a diferença?
+  // Melhor deixar assim, com QoS
   WifiHelper wifi;
+  // Esse metodo determina o typo de algoritmo utilizado para controle. Algoritmo AARF
   wifi.SetRemoteStationManager ("ns3::AarfWifiManager");
 
   WifiMacHelper mac;
